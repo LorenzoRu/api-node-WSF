@@ -1,4 +1,4 @@
-const mongoose = require('./connect');
+const mongoose = require('./dbconnect');
 const modelName = 'Session';
 
 const sessionSchema = new mongoose.Schema({

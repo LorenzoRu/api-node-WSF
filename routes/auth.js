@@ -2,8 +2,8 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../bin/models/usersSchem");
+const { Session } = require("../bin/models/sessionsSchem");
 const router = express.Router();
-
 
 router.post("/register", async (req, res) => {
   const errors = [];
@@ -43,15 +43,36 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-   try {
+  try {
     const user = await User.findOne({ name: req.body.name }).exec();
     const match = await bcrypt.compare(req.body.password, user.password);
-    if (!match) throw "Erreur d'authentification";
-    return res.jsonRes("utilisateur connecté", null, null, 200);
-
-   } catch(e) {
-      res.jsonRes("Erreur lors de la connexion", null, e, 400);
-   }
+    if (!match) {
+      throw "Erreur d'authentification";
+    } else {
+      const token = jwt.sign({ id: user._id, name: user.name }, "cookies");
+      const userData = user;
+      delete userData._doc.password;
+      const newSession = new Session({
+        user_id: user._id,
+        token: token,
+        user_agent: req.headers["user-agent"],
+        created_at: new Date(),
+      });
+      newSession.save().then(() => {
+        return res.jsonRes(
+          "utilisateur connecté",
+          { token, userData },
+          null,
+          200
+        );
+      })
+      .catch((err) =>{
+        res.jsonRes("Une  erreur à eu lieu lors de la création de la session !", null, err, 400);
+      } );
+    }
+  } catch (e) {
+    res.jsonRes("Erreur lors de la connexion", null, e, 400);
+  }
 });
 
 module.exports = router;
