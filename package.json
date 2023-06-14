@@ -3,15 +3,22 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "test": "jest",
+    "test-coverage": "jest --coverage"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.0.2",
     "bcrypt": "^5.1.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
-    "express": "~4.16.1",
+    "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.2.4",
     "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "supertest": "^6.3.3"
   }
 }
