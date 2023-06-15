@@ -4,9 +4,10 @@ const modelName = "Task";
 const taskSchema = new mongoose.Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
-    status: String,
+    done: { type: Boolean, required: true, default: false },
     created_at: { type: Date, required: true },
     updated_at: { type: Date, required: true },
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 }); // add validating Schema
 const Task = mongoose.model(modelName, taskSchema);
 

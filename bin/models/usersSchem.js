@@ -2,11 +2,23 @@ const mongoose = require("./dbconnect");
 const modelName = "User";
 const bcrypt = require("bcrypt");
 
+
 //add validating Schema
+
+
 const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  password: { type: String, required: true },
-  email: String,
+  name: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  }
 });
 userSchema.statics.logUser = async (name, password) => {
   // check if user exists

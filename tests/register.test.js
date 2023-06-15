@@ -27,7 +27,8 @@ describe("POST auth/register", () => {
       })
       .then((res) => {
         console.log(res.body);
-        expect(res.statusCode).toBe(422);
+        expect(res.statusCode).toBe(422
+);
       });
   });
   test("Fail register, missing username", () => {

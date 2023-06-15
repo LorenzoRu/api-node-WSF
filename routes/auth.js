@@ -4,18 +4,22 @@ const jwt = require("jsonwebtoken");
 const { User } = require("../bin/models/usersSchem");
 const { Session } = require("../bin/models/sessionsSchem");
 const router = express.Router();
+const validator = require("validator");
 
 router.post("/register", async (req, res) => {
-  const errors = [];
-  //tests user already exist
   const user = await User.findOne({ name: req.body.name }).exec();
-  if (user !== null) errors.push("Ce pseudo est déjà utilisé");
-  //tests empty username field
-  if (req.body.name === undefined || req.body.name.lenght === 0)
-    errors.push("Vous devez indiquer un pseudo");
-  //tests empty password field
-  if (req.body.password === undefined || req.body.password.lenght === 0)
-    errors.push("Vous devez indiquer un mot de passe");
+  const errors = [];
+ 
+  //tests user already exist
+ if (req.body.name === undefined ||req.body.name.length === 0) 
+    errors.push("Nom d'utilisateur manquant");
+    else if (user !== null) errors.push("Nom d'utilisateur déjà utilisé");
+  //test password
+  if (req.body.password === undefined || req.body.password.length === 0)
+    errors.push("Mot de passe manquant");
+  //test email
+  if (req.body.email === undefined || req.body.email.length === 0 || !validator.isEmail(req.body.email))
+    errors.push("Email manquant");
   //test errors forms
   if (errors.length > 0) res.jsonRes("Formulaire invalide", null, errors, 422);
   else {
