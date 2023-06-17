@@ -1,6 +1,6 @@
 const mongoose = require("./dbconnect");
 const modelName = "User";
-const bcrypt = require("bcrypt");
+const { Task } = require("./taskSchem");
 
 
 //add validating Schema
@@ -20,14 +20,13 @@ const userSchema = new mongoose.Schema({
     required: true,
   }
 });
-userSchema.statics.logUser = async (name, password) => {
-  // check if user exists
-  const user = User.findOne({ name: name }).exec();
-  if (user === null) throw "Erreur d'authentification";
-  // check if password is correct
-  const match = await bcrypt.compare(password, user.password);
-  if (!match) throw "Erreur d'authentification";
-  return user;
-};
+Task.find()
+  .populate("user_name", "name") // Populate the user field and only retrieve the name field
+  .exec()
+  .catch((error) => {
+    // Error retrieving tasks
+    console.log(error);
+  });
+
 const User = mongoose.model(modelName, userSchema);
 module.exports = { User, modelName, userSchema };
