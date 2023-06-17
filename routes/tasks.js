@@ -18,7 +18,6 @@ router.get("/:user/list", auth, async (req, res, next) => {
 router.post("/:user/create", auth, async (req, res, next) => {
   const errors = [];
   const user = await User.findOne({ name: req.params.user }).exec();
-  console.log(user._id.toString());
   //check if user is connected
   if (req.params.user === undefined || user === null) {
     errors.push("Utilisateur non valide");
